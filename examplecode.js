@@ -1,7 +1,4 @@
-/* globals fetch, moment */
-console.log('Hello, World!')
 
-const url = 'http://localhost:3000/todos'
 const todoList = document.getElementById('todo-list')
 const form = document.querySelector (#todo-form)
 
