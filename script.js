@@ -24,8 +24,7 @@ root.innerHTML = `
 const aideMemoire = document.getElementById("aideMemoire");
 const form = document.getElementById("notesBody");
 const listOfNotes = document.getElementById("listOfNotes");
-//const notesBody = document.getElementById("notesBody");
-//const inputBox = document.getElementById('inputBox')
+
 //this is to grab the list from the DOM
 form.addEventListener("submit", (e) => {
   e.preventDefault();
@@ -34,18 +33,43 @@ form.addEventListener("submit", (e) => {
   createNote(inputBox);
 });
 
-listOfNotes.addEventListener('click', (e) => {
-  if (e.target.classList.contains('delete')) {
-    console.log("noteDeleted")
-    noteEl.parentElement(e.target)
-  }
-if (e.target.classList.contains('edit')) {
-  console.log('noteEdited')
-  updateListOfNotes(e.target)
+function deleteNote(noteEl) {
+  fetch(url + '/' + `${noteEl.parentElement.id}`, {
+      method: 'DELETE',
+      headers: {
+          'Content-Type' : 'application/json'
+      }
+  }).then(() => noteEl.parentElement.remove())
 }
-})
+function editNote(noteEl) {
+  const noteText = document.getElementById("note-text").value
+  fetch(url + '/' + `${noteEl.parentElement.id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+          title: noteText,
+          body: noteText,
+          created_at: moment().format()
+      })
+  })
+  .then(res => res.json())
+  .then(data => {
+      renderListOfNotes(noteEl.parentElement, data)
+  })
+}
 
 
+
+listOfNotes.addEventListener("click", (e) => {
+  if (e.target.classList.contains("delete")) {
+    console.log("noteDeleted");
+     deleteNote(e.target);
+  }
+  if (e.target.classList.contains("edit")) {
+    console.log("noteEdited");
+    editNote(e.target);
+  }
+});
 
 function noteList() {
   fetch(url)
