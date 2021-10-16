@@ -14,34 +14,38 @@ root.innerHTML = `
         />
 </div>
 <button id="addToList" type="submit">Add to List</button>
-    <div class="listOfNotes"
-    <ul id="listOfNotes"></ul>
-    </div>
 </form>
- </div>
+<div class="listOfNotes">
+<ul id="listOfNotes"></ul>
+</div>
+</div>
 `;
 
 const aideMemoire = document.getElementById("aideMemoire");
-const inputBox = document.querySelector("#inputBox");
-const listofNotes = document.getElementById("listofNotes");
-const notesBody = document.getElementById("notesBody");
+const form = document.getElementById("notesBody");
+const listOfNotes = document.getElementById("listOfNotes");
+//const notesBody = document.getElementById("notesBody");
 //const inputBox = document.getElementById('inputBox')
 //this is to grab the list from the DOM
-
-inputBox.addEventListener("submit", (e) => {
+form.addEventListener("submit", (e) => {
   e.preventDefault();
   const inputBox = document.getElementById("inputBox").value;
   console.log(inputBox);
   createNote(inputBox);
+});
+
+listOfNotes.addEventListener('click', (e) => {
+  if (e.target.classList.contains('delete')) {
+    console.log("noteDeleted")
+    noteEl.parentElement(e.target)
+  }
+if (e.target.classList.contains('edit')) {
+  console.log('noteEdited')
+  updateListOfNotes(e.target)
+}
 })
 
-notesBody.addEventListener("click", (e) => {
-  let inputBox = document.getElementById("inputBox");
-  if (e.target.classlist.contains("delete")) {
-    createNote(inputBox);
-    form.reset();
-  }
-})
+
 
 function noteList() {
   fetch(url)
@@ -50,17 +54,26 @@ function noteList() {
       console.log(data);
       for (let item of data) {
         renderListOfNotes(item);
+        console.log(item.id);
       }
     });
 }
+
 function renderListOfNotes(noteObj) {
-  let li = document.createElement("li");
+  const li = document.createElement("li");
   li.id = noteObj.id;
-  li.classList.add();
-  renderListOfNotes(li, noteObj);
-  listofNotes.appendChild(li);
+  //li.classList.add();
+  renderNoteText(li, noteObj);
+  listOfNotes.appendChild(li);
+  console.log(noteObj);
 }
 
+function renderNoteText(li, noteObj) {
+  li.innerHTML = `
+  <span>${noteObj.body}</span>
+  <i class="ml2 dark-red fas fa-times delete"></i><i class="ml3 fas fa-edit edit"></i>
+  `;
+}
 function createNote(noteText) {
   fetch(url, {
     method: "POST",
@@ -74,23 +87,5 @@ function createNote(noteText) {
     .then((res) => res.json())
     .then((data) => renderListOfNotes(data));
 }
-
-//function deleteNote(listofNotesEl) {
-//  fetch(url + "/"`$(listOfNotesEl.id)`, {
-//   method: "DELETE",
-//  }).then(() => listofNotesEl.ParentElement.remove());
-//}
-//function updateNote(noteEl)
-//  let noteText = document.getElementById('note-text').value
-//   fetch(url + '/' `${noteEl.id}`, {
-//      method: 'PUT',
-//      headers: { 'Content-Type': 'application/json' },
-//       body: JSON.stringify({
-//           title: noteText,
-//           body: noteText,
-//           updated_at: moment().format()
-//       })
-//   }
-//   )
 
 noteList();
