@@ -97,5 +97,22 @@ function updateTodo(todoEl)
         })
     }
     )
+
+
+    function updateNote(noteEl) {
+        const noteText = document.getElementById('note-text').value;
+        fetch(url + '/' + `${noteEl.parentElement.parentElement.id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                title: noteText,
+                body: noteText,
+                updated_at: moment().format(),
+            }),
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                renderNoteText(noteEl.parentElement.parentElement, data);
+            }      
 //this is the edit feature for the list
 listTodos()

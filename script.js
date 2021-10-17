@@ -29,8 +29,12 @@ const listOfNotes = document.getElementById("listOfNotes");
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const inputBox = document.getElementById("inputBox").value;
-  console.log(inputBox);
-  createNote(inputBox);
+  if (inputBox === "") {
+    form.reset()
+  } else {
+    console.log(inputBox);
+    createNote(inputBox);
+  }
 });
 
 function deleteNote(noteEl) {
