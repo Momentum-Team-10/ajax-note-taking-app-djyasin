@@ -34,36 +34,36 @@ form.addEventListener("submit", (e) => {
 });
 
 function deleteNote(noteEl) {
-  fetch(url + '/' + `${noteEl.parentElement.id}`, {
-      method: 'DELETE',
-      headers: {
-          'Content-Type' : 'application/json'
-      }
-  }).then(() => noteEl.parentElement.remove())
+  fetch(url + "/" + `${noteEl.parentElement.id}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  }).then(() => noteEl.parentElement.remove());
 }
+
 function editNote(noteEl) {
-  const noteText = document.getElementById("note-text").value
-  fetch(url + '/' + `${noteEl.parentElement.id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-          title: noteText,
-          body: noteText,
-          created_at: moment().format()
-      })
-  })
-  .then(res => res.json())
-  .then(data => {
-      renderListOfNotes(noteEl.parentElement, data)
-  })
+const editNote = document.getElementById("inputBox").value;
+console.log(editNote)
+fetch(url + "/" + `${noteEl.parentElement.id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+    title: editNote,
+    body: editNote,
+    updated_at: moment().format(),
+}),
+})
+.then((res) => res.json())
+.then((data) => {
+renderListOfNotes(noteEl.parentElement, data);
+});
 }
-
-
 
 listOfNotes.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) {
     console.log("noteDeleted");
-     deleteNote(e.target);
+    deleteNote(e.target);
   }
   if (e.target.classList.contains("edit")) {
     console.log("noteEdited");
@@ -112,4 +112,4 @@ function createNote(noteText) {
     .then((data) => renderListOfNotes(data));
 }
 
-noteList();
+noteList()
