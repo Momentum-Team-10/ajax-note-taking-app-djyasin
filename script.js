@@ -21,11 +21,12 @@ root.innerHTML = `
 </div>
 `;
 
-const aideMemoire = document.getElementById("aideMemoire");
+//this declares the text within the list
 const form = document.getElementById("notesBody");
+//this calls the form itself
 const listOfNotes = document.getElementById("listOfNotes");
 
-//this is to grab the list from the DOM
+//this is the event listener for when the input is submitted
 form.addEventListener("submit", (e) => {
   e.preventDefault();
   const inputBox = document.getElementById("inputBox").value;
@@ -37,6 +38,7 @@ form.addEventListener("submit", (e) => {
   }
 });
 
+//function to handle delete fetch request
 function deleteNote(noteEl) {
   fetch(url + "/" + `${noteEl.parentElement.id}`, {
     method: "DELETE",
@@ -46,6 +48,7 @@ function deleteNote(noteEl) {
   }).then(() => noteEl.parentElement.remove());
 }
 
+//function to update note text
 function editNote(noteEl) {
   const editNote = document.getElementById("inputBox").value;
   console.log(editNote)
@@ -64,6 +67,7 @@ function editNote(noteEl) {
   });
   }
 
+  //this triggers the edit and delete functions when the respective icons are clicked.
 listOfNotes.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) {
     console.log("noteDeleted");
@@ -75,6 +79,7 @@ listOfNotes.addEventListener("click", (e) => {
   }
 });
 
+//fetches note list
 function noteList() {
   fetch(url)
     .then((res) => res.json())
@@ -87,6 +92,7 @@ function noteList() {
     });
 }
 
+//this is the function that actually posts the text to the list
 function renderListOfNotes(noteObj) {
   const li = document.createElement("li");
   li.id = noteObj.id;
@@ -96,12 +102,15 @@ function renderListOfNotes(noteObj) {
   console.log(noteObj);
 }
 
+//these create the edit and delete icons
 function renderNoteText(li, noteObj) {
   li.innerHTML = `
   <span>${noteObj.body}</span>
   <i class="ml2 dark-red fas fa-times delete"></i><i class="ml3 fas fa-edit edit"></i>
   `;
 }
+
+//this is the function that creates the note
 function createNote(noteText) {
   fetch(url, {
     method: "POST",
