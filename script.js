@@ -47,22 +47,22 @@ function deleteNote(noteEl) {
 }
 
 function editNote(noteEl) {
-const editNote = document.getElementById("inputBox").value;
-console.log(editNote)
-fetch(url + "/" + `${noteEl.parentElement.id}`, {
-    method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-    title: editNote,
-    body: editNote,
-    updated_at: moment().format(),
-}),
-})
-.then((res) => res.json())
-.then((data) => {
-renderListOfNotes(noteEl.parentElement, data);
-});
-}
+  const editNote = document.getElementById("inputBox").value;
+  console.log(editNote)
+  fetch(url + "/" + `${noteEl.parentElement.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+      title: noteEl,
+      body: noteEl,
+      updated_at: moment().format(),
+  }),
+  })
+  .then((res) => res.json())
+  .then((data) => {
+  renderNoteText(noteEl.parentElement, data);
+  });
+  }
 
 listOfNotes.addEventListener("click", (e) => {
   if (e.target.classList.contains("delete")) {
